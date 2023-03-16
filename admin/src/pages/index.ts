@@ -1,0 +1,10 @@
+export { default as Login } from "./Login";
+export { default as Dashboard } from "./Dashboard";
+export { default as Product } from "./Product";
+export { default as ProductDetail } from "./ProductDetail";
+export { default as Category } from "./Category";
+export { default as Order } from "./Order";
+export { default as OrderDetail } from "./OrderDetail";
+export { default as Customer } from "./Customer";
+export { default as CustomerOrder } from "./CustomerOrder";
+export { default as Coupon } from "./Coupon";

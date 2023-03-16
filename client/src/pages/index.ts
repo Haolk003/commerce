@@ -1,0 +1,14 @@
+export { default as Home } from "./Home";
+export { default as Contact } from "./Contact";
+export { default as About } from "./About";
+export { default as OurStore } from "./Products";
+export { default as Product } from "./Product";
+export { default as Login } from "./Login";
+export { default as Register } from "./Register";
+export { default as Cart } from "./Cart";
+export { default as Checkout } from "./Checkout";
+export { default as Checkout2 } from "./Checkout2";
+export { default as Profile } from "./Profile";
+export { default as ForgotPassword } from "./ForgotPass";
+export { default as ResetPassword } from "./ResetPassword";
+export { default as Deal } from "./Deal";
