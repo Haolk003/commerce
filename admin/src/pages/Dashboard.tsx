@@ -230,7 +230,7 @@ const Dashboard = () => {
           <p className="text-2xl font-semibold">
             ${" "}
             {aggOrder && aggOrder?.orderDay
-              ? aggOrder.orderDay[0]?.sum_price
+              ? aggOrder.orderDay[0]?.sum_price.toFixed(2)
               : 0}
           </p>
         </div>
@@ -248,11 +248,7 @@ const Dashboard = () => {
           <BsCreditCard className="text-4xl" />
           <h2 className="text-xl">Total Order</h2>
           <p className="text-2xl font-semibold">
-            ${" "}
-            {orders &&
-              orders.reduce((total, item) => {
-                return item.paymentIntent.amount + total;
-              }, 0)}
+            $ {orders && aggOrder?.orderAll[0].sum_price.toFixed(2)}
           </p>
         </div>
       </div>
