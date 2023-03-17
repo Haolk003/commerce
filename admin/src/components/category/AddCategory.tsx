@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hooks";
 
 import type { UploadProps } from "antd";
 import * as yup from "yup";
-
+import { resetForm } from "../../features/pCategory/pCategorySlice";
 import { Upload, Modal, Input, Button } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
 import type { RcFile } from "antd/es/upload";
@@ -15,6 +15,7 @@ import { getPCategories } from "../../features/pCategory/pCategorySlice";
 import { createProduct } from "../../features/products/ProductSlice";
 import { uploadImage } from "../../utils/uploadImg";
 import { createCategory } from "../../features/pCategory/pCategorySlice";
+import { showToastSuccess, showToastError } from "../../utils/toast";
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -36,6 +37,9 @@ const schema = yup.object().shape({
 });
 const AddProduct = ({ open, closeModal }: ProductProps) => {
   const dispatch = useAppDispatch();
+  const { isError, isLoading, isSuccess, message } = useAppSelector(
+    (state) => state.pCategory
+  );
   const [previewOpen, setPreviewOpen] = useState(false);
   const [imgErr, setImgErr] = useState(false);
   const [previewImage, setPreviewImage] = useState("");
@@ -85,6 +89,18 @@ const AddProduct = ({ open, closeModal }: ProductProps) => {
   useEffect(() => {
     dispatch(getPCategories(""));
   }, []);
+  useEffect(() => {
+    if (message === "create failure") {
+      showToastError("Add to failure categories");
+      dispatch(resetForm());
+    }
+  }, [message]);
+  useEffect(() => {
+    if (message === "create successfully") {
+      showToastSuccess("Add to successfully category");
+      dispatch(resetForm());
+    }
+  }, [message]);
 
   return (
     <div>

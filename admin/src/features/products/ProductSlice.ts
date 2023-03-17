@@ -1,5 +1,5 @@
 import productService from "./ProductService";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 interface UserState {
   _id: string;
   title: string;
@@ -60,11 +60,11 @@ interface getAllProduct {
 }
 export const getProducts = createAsyncThunk(
   "products/getAll",
-  async (query: string) => {
+  async (query: string, { rejectWithValue }) => {
     try {
       return await productService.getProducts(query);
     } catch (err) {
-      console.log(err);
+      return rejectWithValue(err);
     }
   }
 );
@@ -74,7 +74,7 @@ export const createProduct = createAsyncThunk(
     try {
       return await productService.createProduct(product);
     } catch (err) {
-      rejectWithValue(err);
+      return rejectWithValue(err);
     }
   }
 );
@@ -85,7 +85,7 @@ export const deleteProduct = createAsyncThunk(
       await productService.deleteProduct(id);
       return id;
     } catch (err) {
-      rejectWithValue(err);
+      return rejectWithValue(err);
     }
   }
 );
@@ -99,20 +99,22 @@ export const getProduct = createAsyncThunk(
     }
   }
 );
+
 interface updateProduct {
   id: string;
   product: ProductProps;
 }
 export const updateProduct = createAsyncThunk(
   "products/update",
-  async ({ id, product }: updateProduct) => {
+  async ({ id, product }: updateProduct, { rejectWithValue }) => {
     try {
       return await productService.updateProduct({ data: product, id: id });
     } catch (err) {
-      console.log(err);
+      return rejectWithValue(err);
     }
   }
 );
+export const resetForm = createAction("reset-form");
 const ProductSlice = createSlice({
   name: "users",
   initialState,
@@ -147,15 +149,14 @@ const ProductSlice = createSlice({
       if (action.payload) {
         state.products.unshift(action.payload);
       }
-
+      state.message = "create product sucessfully";
       state.isError = false;
     });
     builder.addCase(createProduct.rejected, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
-
-      state.message = action.error;
+      state.message = "create product failure";
     });
     builder.addCase(deleteProduct.pending, (state) => {
       state.isLoading = true;
@@ -165,6 +166,7 @@ const ProductSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
       state.products = state.products.filter((item) => item._id !== id);
+      state.message = "deleted product";
       state.isError = false;
     });
     builder.addCase(deleteProduct.rejected, (state, action: any) => {
@@ -183,6 +185,7 @@ const ProductSlice = createSlice({
       const index = state.products.findIndex(
         (item) => item._id === action.payload._id
       );
+      state.message = "edit product sucessfully";
       state.products[index] = action.payload;
       state.product = action.payload;
       state.isError = false;
@@ -191,7 +194,7 @@ const ProductSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
-      state.message = action.error;
+      state.message = "edit product failure";
     });
     builder.addCase(getProduct.pending, (state) => {
       state.isLoading = true;
@@ -207,6 +210,12 @@ const ProductSlice = createSlice({
       state.isSuccess = false;
       state.isError = true;
       state.message = action.error;
+    });
+    builder.addCase(resetForm, (state) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.message = "";
     });
   },
 });

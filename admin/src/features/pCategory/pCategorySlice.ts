@@ -1,5 +1,5 @@
 import CategoryService from "./PCategoryService";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 interface UserState {
   _id: string;
   title?: string;
@@ -37,11 +37,11 @@ interface CategoriesProps {
 }
 export const createCategory = createAsyncThunk(
   "PCategory/create",
-  async (data: CategoriesProps) => {
+  async (data: CategoriesProps, { rejectWithValue }) => {
     try {
       return await CategoryService.createCategory(data);
     } catch (err) {
-      console.log(err);
+      rejectWithValue(err);
     }
   }
 );
@@ -51,11 +51,11 @@ interface UpdateData {
 }
 export const updateCategory = createAsyncThunk(
   "PCategories/update",
-  async ({ data, id }: UpdateData) => {
+  async ({ data, id }: UpdateData, { rejectWithValue }) => {
     try {
       return await CategoryService.updateCategory({ data: data, id: id });
     } catch (err) {
-      console.log(err);
+      return rejectWithValue(err);
     }
   }
 );
@@ -70,6 +70,7 @@ export const deleteCategory = createAsyncThunk(
     }
   }
 );
+export const resetForm = createAction("reset-form");
 const PCategoryslice = createSlice({
   name: "users",
   initialState,
@@ -80,16 +81,14 @@ const PCategoryslice = createSlice({
     });
     builder.addCase(getPCategories.fulfilled, (state, action: any) => {
       state.isLoading = false;
-      state.isSuccess = true;
+
       state.categories = action.payload;
-      state.isError = false;
     });
     builder.addCase(getPCategories.rejected, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
       state.categories = [];
-      state.message = action.error;
     });
     builder.addCase(createCategory.pending, (state) => {
       state.isLoading = true;
@@ -101,12 +100,13 @@ const PCategoryslice = createSlice({
         state.categories.unshift(action.payload);
       }
       state.isError = false;
+      state.message = "create successfully";
     });
     builder.addCase(createCategory.rejected, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
-      state.message = action.error;
+      state.message = "update failure";
     });
     builder.addCase(updateCategory.pending, (state) => {
       state.isLoading = true;
@@ -119,13 +119,14 @@ const PCategoryslice = createSlice({
       );
       state.categories[index] = action.payload;
       state.isError = false;
+      state.message = "update successfully";
     });
     builder.addCase(updateCategory.rejected, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
       state.categories = [];
-      state.message = action.error;
+      state.message = "update failure";
     });
     builder.addCase(deleteCategory.pending, (state) => {
       state.isLoading = true;
@@ -143,7 +144,12 @@ const PCategoryslice = createSlice({
       state.isSuccess = false;
       state.isError = true;
       state.categories = [];
-      state.message = action.error;
+    });
+    builder.addCase(resetForm, (state) => {
+      state.isError = false;
+      state.isLoading = false;
+      state.isSuccess = false;
+      state.message = "";
     });
   },
 });

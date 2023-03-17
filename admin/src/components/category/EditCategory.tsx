@@ -11,10 +11,14 @@ import * as yup from "yup";
 import { Upload, Modal, Input, Button } from "antd";
 import type { UploadFile } from "antd/es/upload/interface";
 import type { RcFile } from "antd/es/upload";
-import { getPCategories } from "../../features/pCategory/pCategorySlice";
+import {
+  getPCategories,
+  resetForm,
+} from "../../features/pCategory/pCategorySlice";
 import { createProduct } from "../../features/products/ProductSlice";
 import { uploadImage } from "../../utils/uploadImg";
 import { updateCategory } from "../../features/pCategory/pCategorySlice";
+import { showToastError, showToastSuccess } from "../../utils/toast";
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -47,6 +51,9 @@ const AddProduct = ({ open, closeModal, category }: ProductProps) => {
   const [previewImage, setPreviewImage] = useState("");
   const [previewTitle, setPreviewTitle] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const { isError, isLoading, isSuccess, message } = useAppSelector(
+    (state) => state.pCategory
+  );
   const handleCancel = () => setPreviewOpen(false);
 
   const handlePreview = async (file: UploadFile) => {
@@ -111,7 +118,18 @@ const AddProduct = ({ open, closeModal, category }: ProductProps) => {
   useEffect(() => {
     dispatch(getPCategories(""));
   }, []);
-
+  useEffect(() => {
+    if (message === "update failure") {
+      showToastError("Edit to failure categories");
+      dispatch(resetForm());
+    }
+  }, [isError, isLoading, message]);
+  useEffect(() => {
+    if (message === "update successfully") {
+      showToastSuccess("Edit to successfully category");
+      dispatch(resetForm());
+    }
+  }, [message]);
   return (
     <div>
       <Drawer

@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { AiOutlineClose } from "react-icons/ai";
 import { PlusOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-
+import { showToastError, showToastSuccess } from "../../utils/toast";
 import type { UploadProps } from "antd";
 import * as yup from "yup";
 import {
@@ -25,6 +25,7 @@ import { getPCategories } from "../../features/pCategory/pCategorySlice";
 import { updateProduct } from "../../features/products/ProductSlice";
 import { uploadImage } from "../../utils/uploadImg";
 import { getProduct } from "../../features/products/ProductSlice";
+import { resetForm } from "../../features/pCategory/pCategorySlice";
 import dayjs, { Dayjs } from "dayjs";
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -75,7 +76,7 @@ const schema = yup.object().shape({
 const EditProduct = ({ open, closeModal, product }: ProductProps) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.pCategory.categories);
-
+  const { message, isLoading } = useAppSelector((state) => state.product);
   const newCategories =
     categories &&
     categories.reduce((arr: any, item: any) => {
@@ -158,7 +159,6 @@ const EditProduct = ({ open, closeModal, product }: ProductProps) => {
       } else {
         setTimeRange(undefined);
       }
-      console.log(timeRange);
       setDiscount(product.sale?.discount);
     }
   }, [product, open]);
@@ -200,7 +200,15 @@ const EditProduct = ({ open, closeModal, product }: ProductProps) => {
       closeModal();
     },
   });
-
+  useEffect(() => {
+    if (message === "edit product sucessfully") {
+      showToastSuccess("Update Successfully Product");
+      dispatch(resetForm());
+    } else if (message === "edit product failure") {
+      showToastError("Update Failure Product");
+      dispatch(resetForm());
+    }
+  }, [message]);
   useEffect(() => {
     dispatch(getPCategories(""));
   }, []);
