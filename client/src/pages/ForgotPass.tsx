@@ -3,15 +3,18 @@ import { TextField } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { useAppDispatch, useAppSelector } from "../store/hook";
-import { login } from "../features/auth/authSlice";
-import { NotLoggedInOnly } from "../components";
 import { forgotPassword } from "../features/auth/authSlice";
+import { showToastError } from "../utils/toast";
+import { ColorRing } from "react-loader-spinner";
+import { resetForm } from "../features/auth/authSlice";
 interface MyFormValues {
   email: string;
 }
 const ForgotPass = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.auth.user);
+  const { user, isLoading, isError, isSuccess } = useAppSelector(
+    (state) => state.auth
+  );
   const formik = useFormik<MyFormValues>({
     initialValues: { email: "" },
     onSubmit(values) {
@@ -19,8 +22,14 @@ const ForgotPass = () => {
     },
   });
   useEffect(() => {
-    console.log(user);
-  }, [user]);
+    if (isError && !isLoading) {
+      showToastError("Email does not exist");
+      dispatch(resetForm());
+    }
+  }, [isError, isLoading]);
+  useEffect(() => {
+    dispatch(resetForm());
+  }, []);
   return (
     <div className="flex  gap-12 w-[60%] mx-auto h-screen items-center">
       <img
@@ -54,13 +63,26 @@ const ForgotPass = () => {
           >
             Reset Password
           </button>
-          <button type="button" className="text-link-hover ml-3">
+          <Link to="/login" type="button" className="text-link-hover ml-3">
             Cancel
-          </button>
+          </Link>
         </div>
       </form>
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center bg-[rgb(0,0,0,0.3)] ">
+          <ColorRing
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
-export default NotLoggedInOnly(ForgotPass);
+export default ForgotPass;

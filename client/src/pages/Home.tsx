@@ -47,7 +47,7 @@ const Home = () => {
     dispatch(getProductTrending());
     dispatch(getProductTopRated());
   }, []);
-
+  useEffect(() => {}, []);
   return (
     <div className="bg-bg-primary">
       <Intro />

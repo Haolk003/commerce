@@ -4,20 +4,31 @@ import { Link } from "react-router-dom";
 import { useFormik } from "formik";
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { login } from "../features/auth/authSlice";
-import { NotLoggedInOnly } from "../components";
+import { showToastError } from "../utils/toast";
+import { ColorRing } from "react-loader-spinner";
+import { resetForm } from "../features/auth/authSlice";
 interface MyFormValues {
   email: string;
   password: string;
 }
 const Login = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.auth.user);
+  const { user, isLoading, isError, isSuccess, message } = useAppSelector(
+    (state) => state.auth
+  );
   const formik = useFormik<MyFormValues>({
     initialValues: { email: "", password: "" },
     onSubmit(values) {
       dispatch(login(values));
     },
   });
+  useEffect(() => {
+    if (isError && !isLoading) {
+      showToastError("Incorrect email or password");
+      dispatch(resetForm());
+    }
+  }, [isError, isLoading]);
+
   useEffect(() => {
     console.log(user);
   }, [user]);
@@ -69,8 +80,21 @@ const Login = () => {
           Login
         </button>
       </form>
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center bg-[rgb(0,0,0,0.3)] ">
+          <ColorRing
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
-export default NotLoggedInOnly(Login);
+export default Login;

@@ -1,20 +1,16 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
+import React from "react";
 import { useEffect } from "react";
 import { useAppSelector } from "../../store/hook";
-
-const withAuth = (WrappedComponent: React.ComponentType<any>) => {
-  const AuthenticatedComponent = () => {
-    const navigate = useNavigate();
-    const user = useAppSelector((state) => state.auth.user);
-    useEffect(() => {
-      if (user) {
-        navigate("/");
-      }
-    }, [user]);
-
-    return <WrappedComponent />;
-  };
-
-  return AuthenticatedComponent;
+type Props = {
+  children: React.ReactNode;
 };
-export default withAuth;
+const LoggedInOnly: React.FC<Props> = ({ children }) => {
+  const user = useAppSelector((state) => state.auth.user);
+  if (user) {
+    return <Navigate to="/" replace={true} />;
+  }
+
+  return <>{children}</>;
+};
+export default LoggedInOnly;

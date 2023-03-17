@@ -78,8 +78,9 @@ export const login = createAsyncThunk(
   async (user: user, { rejectWithValue }) => {
     try {
       return await authService.login(user);
-    } catch (err) {
-      return rejectWithValue(err);
+    } catch (err: any) {
+      return rejectWithValue(err?.response?.data?.message);
+      // return err?.response?.data?.message;
     }
   }
 );
@@ -214,11 +215,12 @@ const userSlice = createSlice({
       state.isSuccess = true;
       state.user = action.payload;
     });
-    builder.addCase(login.rejected, (state) => {
+    builder.addCase(login.rejected, (state, action: any) => {
       state.isLoading = false;
       state.user = null;
       state.isError = true;
       state.isSuccess = false;
+      state.message = action.error;
     });
     builder?.addCase(register.pending, (state, action) => {
       state.isLoading = true;
@@ -362,6 +364,8 @@ const userSlice = createSlice({
     builder.addCase(resetForm, () => initialState);
     builder.addCase(logout.fulfilled, (state) => {
       state.user = null;
+      state.isError = false;
+      state.isSuccess = false;
       localStorage.removeItem("user");
       localStorage.removeItem("token");
     });

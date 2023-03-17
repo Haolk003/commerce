@@ -1,26 +1,20 @@
 import { useState } from "react";
 import { Router, Route, Routes } from "react-router-dom";
-import { Layout, NotLoggedInOnly } from "./components";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "./store/hook";
-
+import { Layout, NotLoggedInOnly, LoggedInOnly } from "./components";
 import {
   Home,
-  About,
-  Contact,
   OurStore,
   Product,
   Login,
   Register,
   Cart,
-  Checkout,
   Checkout2,
   Profile,
   ForgotPassword,
   ResetPassword,
   Deal,
 } from "./pages";
-
+import { ToastContainer } from "react-toastify";
 import "./App.css";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -28,22 +22,71 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <div className="App">
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
-          <Route path="about" element={<About />} />
-          <Route path="contact" element={<Contact />} />
           <Route path="products" element={<OurStore />} />
           <Route path="product/:id" element={<Product />} />
-          <Route path="cart" element={<Cart />} />
-          <Route path="profile" element={<Profile />} />
+          <Route
+            path="cart"
+            element={
+              <LoggedInOnly>
+                <Cart />{" "}
+              </LoggedInOnly>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <LoggedInOnly>
+                <Profile />
+              </LoggedInOnly>
+            }
+          />
           <Route path="/deal" element={<Deal />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/checkout" element={<Checkout2 />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password/:id" element={<ResetPassword />} />
+
+        <Route
+          path="/login"
+          element={
+            <NotLoggedInOnly>
+              <Login />
+            </NotLoggedInOnly>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <LoggedInOnly>
+              <Checkout2 />
+            </LoggedInOnly>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <NotLoggedInOnly>
+              <Register />
+            </NotLoggedInOnly>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <NotLoggedInOnly>
+              <ForgotPassword />
+            </NotLoggedInOnly>
+          }
+        />
+        <Route
+          path="/reset-password/:id"
+          element={
+            <NotLoggedInOnly>
+              <ResetPassword />
+            </NotLoggedInOnly>
+          }
+        />
       </Routes>
     </div>
   );

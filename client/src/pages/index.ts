@@ -1,6 +1,4 @@
 export { default as Home } from "./Home";
-export { default as Contact } from "./Contact";
-export { default as About } from "./About";
 export { default as OurStore } from "./Products";
 export { default as Product } from "./Product";
 export { default as Login } from "./Login";

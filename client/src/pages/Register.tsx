@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -6,6 +6,9 @@ import { useAppDispatch, useAppSelector } from "../store/hook";
 import { useFormik } from "formik";
 import { object, string } from "yup";
 import { register, resetForm } from "../features/auth/authSlice";
+import { ColorRing } from "react-loader-spinner";
+import { showToastError } from "../utils/toast";
+
 interface Values {
   firstName: string;
   lastName: string;
@@ -16,7 +19,9 @@ const validateSchema = object().shape({
   firstName: string().required("firstName is required"),
   lastName: string().required("lastName is required"),
   email: string().required("email is required"),
-  password: string().required("password is required"),
+  password: string()
+    .required("password is required")
+    .min(8, "Password must be at least 8 characters"),
 });
 const Register = () => {
   const navigate = useNavigate();
@@ -24,6 +29,7 @@ const Register = () => {
   const { isLoading, isSuccess, isError, message } = useAppSelector(
     (state) => state.auth
   );
+  const [request, setRequest] = useState(false);
   const formik = useFormik<Values>({
     initialValues: {
       firstName: "",
@@ -37,7 +43,6 @@ const Register = () => {
     },
   });
   useEffect(() => {
-    console.log(isSuccess);
     if (isSuccess && !isError) {
       navigate("/login");
       formik.resetForm();
@@ -45,8 +50,15 @@ const Register = () => {
     }
   }, [isSuccess, isError]);
   useEffect(() => {
-    console.log(message);
-  }, [message]);
+    dispatch(resetForm());
+  }, []);
+  useEffect(() => {
+    if (isError && !isLoading) {
+      showToastError("Email already exists");
+      dispatch(resetForm());
+    }
+  }, [isError, isLoading]);
+
   return (
     <form
       className=" gap-10 w-[50%] mx-auto mt-10 flex flex-col"
@@ -127,6 +139,19 @@ const Register = () => {
       >
         Submit & Register
       </button>
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center bg-[rgb(0,0,0,0.3)] ">
+          <ColorRing
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
+        </div>
+      )}
     </form>
   );
 };

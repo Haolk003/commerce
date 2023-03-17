@@ -14,13 +14,17 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importDefault(require("mongoose"));
 const DbConnect = () => __awaiter(void 0, void 0, void 0, function* () {
+    const options = {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    };
     try {
         mongoose_1.default.set("strictQuery", false);
-        yield mongoose_1.default.connect(`${process.env.MONGOOSE_KEY}`);
+        yield mongoose_1.default.connect(`mongodb+srv://haolk003:01653186782az@cluster0.ayevk90.mongodb.net/ecommerce-app?retryWrites=true&w=majority`);
         console.log("Database connected successfully");
     }
     catch (err) {
-        console.log("Database error");
+        console.log(err);
     }
 });
 exports.default = DbConnect;

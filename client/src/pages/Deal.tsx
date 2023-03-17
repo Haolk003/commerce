@@ -51,6 +51,7 @@ const Deal = () => {
                 id={item._id}
                 key={item._id}
                 ratings={item.ratings}
+                quatity={item?.quatity}
               />
             </div>
           );
