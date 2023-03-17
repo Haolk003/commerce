@@ -7,6 +7,8 @@ import * as yup from "yup";
 import dayjs, { Dayjs } from "dayjs";
 import { Input, Button, TimePicker } from "antd";
 import { createCoupons } from "../../features/coupon/couponSlice";
+import { showToastError, showToastSuccess } from "../../utils/toast";
+import { resetForm } from "../../features/coupon/couponSlice";
 interface Value {
   name: string;
   code: string;
@@ -26,6 +28,7 @@ const schema = yup.object().shape({
 const AddProduct = ({ open, closeModal }: ProductProps) => {
   const dispatch = useAppDispatch();
   const [timeRange, setTimeRange] = useState<Dayjs[]>([]);
+  const { message, isLoading } = useAppSelector((state) => state.coupon);
   const formik = useFormik<Value>({
     initialValues: {
       code: "",
@@ -46,8 +49,13 @@ const AddProduct = ({ open, closeModal }: ProductProps) => {
     },
   });
   useEffect(() => {
-    console.log(timeRange);
-  }, [timeRange]);
+    if (message === "add coupon successfully") {
+      showToastSuccess("Add Successfully Coupon");
+      dispatch(resetForm());
+    } else if (message === "add coupon failure") {
+      showToastError("Add Coupon Product");
+    }
+  }, [message]);
   return (
     <div>
       <Drawer

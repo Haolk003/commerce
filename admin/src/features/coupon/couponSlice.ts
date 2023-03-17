@@ -41,11 +41,11 @@ interface CouponProps {
 }
 export const createCoupons = createAsyncThunk(
   "coupons/create",
-  async (data: CouponProps) => {
+  async (data: CouponProps, { rejectWithValue }) => {
     try {
       return await couponService.createCoupon(data);
     } catch (err) {
-      return console.log(err);
+      return rejectWithValue(err);
     }
   }
 );
@@ -56,25 +56,26 @@ interface CouponPropsUpdate {
 
 export const updateCoupons = createAsyncThunk(
   "coupons/update",
-  async ({ data, id }: CouponPropsUpdate) => {
+  async ({ data, id }: CouponPropsUpdate, { rejectWithValue }) => {
     try {
       return await couponService.updateCoupon(data, id);
     } catch (err) {
-      return console.log(err);
+      return rejectWithValue(err);
     }
   }
 );
 export const deleteCoupons = createAsyncThunk(
   "coupons/delete",
-  async (id: string) => {
+  async (id: string, { rejectWithValue }) => {
     try {
       await couponService.deleteCoupon(id);
       return id;
     } catch (err) {
-      return console.log(err);
+      return rejectWithValue(err);
     }
   }
 );
+export const resetForm = createAction("resetForm");
 const CouponSlice = createSlice({
   name: "coupons",
   initialState,
@@ -102,11 +103,13 @@ const CouponSlice = createSlice({
       state.isSuccess = true;
       state.isError = false;
       state.coupons.push(action.payload);
+      state.message = "create coupon successfully";
     });
     builder.addCase(createCoupons.rejected, (state) => {
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
+      state.message = "create coupon failure";
     });
     builder.addCase(updateCoupons.pending, (state) => {
       state.isLoading = true;
@@ -115,6 +118,7 @@ const CouponSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
+      state.message = "edit coupon successfully";
       const index = state.coupons.findIndex(
         (item) => item._id === action.payload._id
       );
@@ -124,6 +128,7 @@ const CouponSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
+      state.message = "edit coupon failure";
     });
     builder.addCase(deleteCoupons.pending, (state) => {
       state.isLoading = true;
@@ -132,6 +137,7 @@ const CouponSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
+      state.message = "delete coupon successfully";
       state.coupons = state.coupons.filter(
         (item) => item._id !== action.payload
       );
@@ -140,6 +146,13 @@ const CouponSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = false;
       state.isError = true;
+      state.message = "delete coupon failure";
+    });
+    builder.addCase(resetForm, (state) => {
+      state.message = "";
+      state.isError = false;
+      state.isLoading = false;
+      state.isSuccess = false;
     });
   },
 });

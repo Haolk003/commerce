@@ -10,7 +10,6 @@ interface getAllProduct {
 }
 const getProducts = async (data: string) => {
   const response = await api.get(`/products/getAll?` + data);
-
   return response.data;
 };
 const getProduct = async (id: string) => {

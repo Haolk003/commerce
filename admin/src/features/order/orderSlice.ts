@@ -161,8 +161,11 @@ const orderslice = createSlice({
     builder.addCase(getOrders.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.orders = action.payload.orders;
-      state.orderCount = action.payload.orderCount;
+      if (action.payload) {
+        state.orders = action.payload.orders;
+        state.orderCount = action.payload.orderCount;
+      }
+
       state.isError = false;
     });
     builder.addCase(getOrders.rejected, (state, action: any) => {

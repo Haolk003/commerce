@@ -240,7 +240,7 @@ const Dashboard = () => {
           <p className="text-2xl font-semibold">
             ${" "}
             {aggOrder && aggOrder.orderMonth
-              ? aggOrder.orderMonth[0].sum_price
+              ? aggOrder.orderMonth[0].sum_price.toFixed(2)
               : 0}
           </p>
         </div>

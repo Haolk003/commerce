@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
-
+import { ToastContainer } from "react-toastify";
 import "./App.css";
+import "react-toastify/dist/ReactToastify.css";
 import {
   Dashboard,
   Login,
@@ -19,6 +20,7 @@ import { MainLayout, LoggedInOnly, NotLoggedInOnly } from "./components";
 function App() {
   return (
     <div className="App">
+      <ToastContainer />
       <Routes>
         <Route
           path="/"

@@ -8,7 +8,7 @@ interface AxiosProps {
   method: string;
 }
 const api = axios.create({
-  baseURL: "http://localhost:5000/api",
+  baseURL: `${import.meta.env.VITE_BACKEND_HOST}`,
   headers: {
     "Content-Type": "application/json",
   },
@@ -23,8 +23,10 @@ api.interceptors.request.use(
 
     if (now >= accessToken?.expiryTime && accessToken?.expiryTime) {
       const { data } = await axios.get(
-        `http://localhost:5000/api/auth/refreshToken`,
-        { withCredentials: true }
+        `${import.meta.env.VITE_BACKEND_HOST}/auth/refreshToken`,
+        {
+          withCredentials: true,
+        }
       );
       console.log(data);
       accessToken = data;

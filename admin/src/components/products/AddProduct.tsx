@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Drawer, InputNumber } from "antd";
-import { useFormik, Field } from "formik";
+import { useFormik } from "formik";
 import { AiOutlineClose } from "react-icons/ai";
 import { PlusOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import { InboxOutlined } from "@ant-design/icons";
 import moment, { Moment } from "moment";
 import type { UploadProps } from "antd";
+import { showToastError, showToastSuccess } from "../../utils/toast";
 import * as yup from "yup";
 import dayjs, { Dayjs } from "dayjs";
 
@@ -25,8 +25,7 @@ import type { RcFile } from "antd/es/upload";
 import { getPCategories } from "../../features/pCategory/pCategorySlice";
 import { createProduct } from "../../features/products/ProductSlice";
 import { uploadImage } from "../../utils/uploadImg";
-import TimeRangePicker from "../RangePicker";
-import { RangeValue } from "rc-picker/lib/interface";
+import { resetForm } from "../../features/products/ProductSlice";
 const getBase64 = (file: RcFile): Promise<string> =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -61,7 +60,9 @@ const schema = yup.object().shape({
 const AddProduct = ({ open, closeModal }: ProductProps) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.pCategory.categories);
-
+  const { isError, isLoading, message } = useAppSelector(
+    (state) => state.product
+  );
   const newCategories =
     categories &&
     categories.reduce((arr: any, item: any) => {
@@ -164,8 +165,14 @@ const AddProduct = ({ open, closeModal }: ProductProps) => {
     dispatch(getPCategories());
   }, []);
   useEffect(() => {
-    console.log(timeRange);
-  }, [timeRange]);
+    if (message === "add product sucessfully") {
+      showToastSuccess("Add Successfully Product");
+      dispatch(resetForm());
+    } else if (message === "add product failure") {
+      showToastError("Add Failure Product");
+      dispatch(resetForm());
+    }
+  }, [message]);
   return (
     <div>
       <Drawer

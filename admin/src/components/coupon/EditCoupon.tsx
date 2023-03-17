@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Drawer, InputNumber } from "antd";
-import { useFormik, Field } from "formik";
+import { Drawer } from "antd";
+import { useFormik } from "formik";
 import { AiOutlineClose } from "react-icons/ai";
-import { PlusOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../app/hooks";
-import moment, { Moment } from "moment";
-import type { UploadProps } from "antd";
+
 import * as yup from "yup";
 import dayjs, { Dayjs } from "dayjs";
-
+import { showToastError, showToastSuccess } from "../../utils/toast";
+import { resetForm } from "../../features/coupon/couponSlice";
 import {
   message,
   Upload,
@@ -58,7 +57,7 @@ const schema = yup.object().shape({
 const EditProduct = ({ open, closeModal, coupon }: ProductProps) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.pCategory.categories);
-
+  const { message, isLoading } = useAppSelector((state) => state.coupon);
   const newCategories =
     categories &&
     categories.reduce((arr: any, item: any) => {
@@ -101,8 +100,13 @@ const EditProduct = ({ open, closeModal, coupon }: ProductProps) => {
     }
   }, [coupon, open]);
   useEffect(() => {
-    console.log(timeRange);
-  }, [timeRange]);
+    if (message === "edit coupon successfully") {
+      showToastSuccess("Add Successfully Coupon");
+      dispatch(resetForm());
+    } else if (message === "edit coupon failure") {
+      showToastError("Add Failure Coupon");
+    }
+  }, [message]);
   return (
     <div>
       <Drawer

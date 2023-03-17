@@ -1,7 +1,7 @@
 import axios from "axios";
 import { base_url } from "../../utils/base_url";
 import { config } from "../../utils/axios.config";
-
+import api from "../../utils/useCallApi";
 const getPCategory = async (search?: string) => {
   const response = await axios.get(
     `${base_url}/product-categories/getAll${
@@ -12,11 +12,7 @@ const getPCategory = async (search?: string) => {
   return response.data;
 };
 const createCategory = async <T>(data: T) => {
-  const response = await axios.post(
-    `${base_url}/product-categories/create`,
-    data,
-    config
-  );
+  const response = await api.post(`/product-categories/create`, data);
   return response.data;
 };
 interface UserState {
@@ -30,18 +26,11 @@ interface UpdateData {
   id: string;
 }
 const updateCategory = async ({ data, id }: UpdateData) => {
-  const response = await axios.put(
-    `${base_url}/product-categories/update/${id}`,
-    data,
-    config
-  );
+  const response = await api.put(`/product-categories/update/${id}`, data);
   return response.data;
 };
 const deleteCategory = async (id: string) => {
-  const response = await axios.delete(
-    `${base_url}/product-categories/delete/${id}`,
-    config
-  );
+  const response = await api.delete(`/product-categories/delete/${id}`);
   return response.data;
 };
 const CategoryService = {
