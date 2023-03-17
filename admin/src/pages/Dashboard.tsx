@@ -214,12 +214,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(getOrders(`${pagination ? `page=${pagination.current}` : 1}`));
   }, [pagination]);
-  useEffect(() => {
-    console.log(weekly);
-  }, [classify, weekly]);
-  useEffect(() => {
-    console.log(product);
-  }, [product]);
+
   return (
     <div>
       <h2 className="text-xl text-color-dark font-[500]">Dashboard Overview</h2>

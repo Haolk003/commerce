@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from "../app/hooks";
 import * as Yup from "yup";
 import { login } from "../features/auth/authSlice";
 import { NotLoggedInOnly } from "../components";
+import { Oval } from "react-loader-spinner";
+import { showToastError } from "../utils/toast";
 interface Values {
   email: string;
   password: string;
@@ -15,6 +17,7 @@ const Login = () => {
   const { user, isError, isLoading, isSuccess } = useAppSelector(
     (state) => state.auth
   );
+
   const dispatch = useAppDispatch();
   let userSchema = Yup.object().shape({
     email: Yup.string()
@@ -37,7 +40,11 @@ const Login = () => {
     const fieldValue = event.target.value;
     formik.setFieldValue(fieldName, fieldValue);
   };
-
+  useEffect(() => {
+    if (isError && !isLoading) {
+      showToastError("Incorrect email or password");
+    }
+  }, [isError, isLoading]);
   return (
     <div className="py-5 h-screen">
       <div className="my-5 w-[60%] bg-white rounded-3  flex  items-center gap-5 mx-auto   rounded-md absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] shadow-md shadow-gray-300">
@@ -98,6 +105,22 @@ const Login = () => {
           </form>
         </div>
       </div>
+      {isLoading && (
+        <div className="w-full h-full fixed top-0 left-0 flex items-center justify-center bg-[rgba(0,0,0,0.3)]">
+          <Oval
+            height={80}
+            width={80}
+            color="#4fa94d"
+            wrapperStyle={{}}
+            wrapperClass=""
+            visible={true}
+            ariaLabel="oval-loading"
+            secondaryColor="#4fa94d"
+            strokeWidth={2}
+            strokeWidthSecondary={2}
+          />
+        </div>
+      )}
     </div>
   );
 };

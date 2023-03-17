@@ -19,9 +19,6 @@ const ProductDetail = () => {
   useEffect(() => {
     dispatch(getProduct(`${id}`));
   }, [id]);
-  useEffect(() => {
-    console.log(product);
-  }, [product]);
   return (
     <div key={id} className="">
       <h2 className="text-xl mb-4 font-semibold">Product Details</h2>

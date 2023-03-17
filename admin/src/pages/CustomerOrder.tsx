@@ -128,8 +128,6 @@ const Order = () => {
   ];
   useEffect(() => {
     dispatch(getOrders(`orderBy=${id}`));
-
-    console.log(limitDay);
   }, [search, status, limitDay]);
   return (
     <div>

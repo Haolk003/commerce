@@ -91,9 +91,7 @@ const Product = () => {
   const handleChangePublic = (value: boolean, id: string) => {
     dispatch(updateProduct({ product: { isPublic: value }, id }));
   };
-  useEffect(() => {
-    console.log(products);
-  }, [products]);
+
   const columns = [
     {
       title: "UID",
