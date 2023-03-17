@@ -102,7 +102,7 @@ const LoginAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         });
         const updateRefreshToken = yield auth_1.default.findByIdAndUpdate(findAdmin._id, {
             refreshToken: refreshTokens,
-        }, { new: true });
+        }, { new: true }).select("firstName lastName email ");
         res.cookie("refreshToken", refreshTokens, {
             httpOnly: true,
             // maxAge: 72 * 60 * 60 * 1000,
@@ -111,7 +111,7 @@ const LoginAdmin = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
         res.status(200).json(Object.assign(Object.assign({}, details), { token: yield (0, jwt_token_1.generateToken)({
                 id: findAdmin._id,
                 isAdmin: findAdmin.isAdmin,
-            }), expiryTime: Date.now() + 15 * 60 * 1000 }));
+            }), expiryTime: Date.now() + 60 * 60 * 1000 }));
     }
     catch (err) {
         next(err);
@@ -155,18 +155,6 @@ const hanleRefreshToken = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 exports.hanleRefreshToken = hanleRefreshToken;
 const logout = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const cookie = req.cookies;
-        console.log(cookie);
-        if (!cookie.refreshToken)
-            throw (0, errorHandle_1.createError)(400, "No refresh token in Cookies");
-        const refreshToken = cookie.refreshToken;
-        const findUser = yield auth_1.default.findOne({ refreshToken });
-        if (!findUser) {
-            console.log("cook");
-            res.clearCookie("refreshToken");
-            return res.status(204).json("logouted");
-        }
-        yield auth_1.default.findOneAndUpdate({ refreshToken }, { refreshToken: "" });
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: true,

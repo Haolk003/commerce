@@ -70,6 +70,11 @@ interface orderMonth {
 interface aggOrder {
   orderDay: orderDay[];
   orderMonth: orderMonth[];
+  orderAll: [
+    {
+      sum_price: number;
+    }
+  ];
 }
 interface OrderState2 {
   orders: OrderState[];

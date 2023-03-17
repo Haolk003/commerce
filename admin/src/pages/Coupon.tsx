@@ -110,9 +110,7 @@ const Coupon = () => {
       ),
     },
   ];
-  useEffect(() => {
-    console.log(coupon);
-  }, [coupon]);
+
   useEffect(() => {
     dispatch(getCoupons(`${search !== "" ? `search=${search}` : ""}`));
   }, [search]);

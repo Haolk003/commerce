@@ -91,7 +91,7 @@ const LoginAdmin = async (req: Request, res: Response, next: NextFunction) => {
         refreshToken: refreshTokens,
       },
       { new: true }
-    );
+    ).select("firstName lastName email ");
     res.cookie("refreshToken", refreshTokens, {
       httpOnly: true,
       // maxAge: 72 * 60 * 60 * 1000,
@@ -113,7 +113,7 @@ const LoginAdmin = async (req: Request, res: Response, next: NextFunction) => {
         id: findAdmin._id,
         isAdmin: findAdmin.isAdmin,
       }),
-      expiryTime: Date.now() + 15 * 60 * 1000,
+      expiryTime: Date.now() + 60 * 60 * 1000,
     });
   } catch (err) {
     next(err);
@@ -159,18 +159,6 @@ const hanleRefreshToken = async (
 };
 const logout = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const cookie = req.cookies;
-    console.log(cookie);
-    if (!cookie.refreshToken)
-      throw createError(400, "No refresh token in Cookies");
-    const refreshToken = cookie.refreshToken;
-    const findUser = await User.findOne({ refreshToken });
-    if (!findUser) {
-      console.log("cook");
-      res.clearCookie("refreshToken");
-      return res.status(204).json("logouted");
-    }
-    await User.findOneAndUpdate({ refreshToken }, { refreshToken: "" });
     res.clearCookie("refreshToken", {
       httpOnly: true,
       secure: true,
