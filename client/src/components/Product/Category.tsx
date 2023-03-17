@@ -6,13 +6,7 @@ const Category = () => {
       <h2 className="font-semibold text-2xl border-b-[1px]  border-color-collection-pr relative after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-[100px] after:h-[1px] after:bg-link-hover py-2">
         Category
       </h2>
-      <div className="mt-4 flex flex-col gap-2">
-        <CategoryItem />
-        <CategoryItem />
-        <CategoryItem />
-        <CategoryItem />
-        <CategoryItem />
-      </div>
+      <div className="mt-4 flex flex-col gap-2"></div>
     </div>
   );
 };

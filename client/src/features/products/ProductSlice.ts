@@ -198,8 +198,8 @@ const ProductSlice = createSlice({
     builder.addCase(getProducts.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.products = action.payload;
-
+      state.products = action.payload.products;
+      state.productCount = action.payload.productCount;
       state.isError = false;
     });
     builder.addCase(getProducts.rejected, (state, action: any) => {
@@ -285,7 +285,7 @@ const ProductSlice = createSlice({
     builder.addCase(Rating.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.product = action.payload;
+      state.product = action.payload.products;
       state.isError = false;
     });
     builder.addCase(Rating.rejected, (state, action: any) => {
@@ -300,7 +300,7 @@ const ProductSlice = createSlice({
     builder.addCase(getProductRecently.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.recentlyProducts = action.payload;
+      state.recentlyProducts = action.payload.products;
       state.isError = false;
     });
     builder.addCase(getProductRecently.rejected, (state, action: any) => {
@@ -315,7 +315,8 @@ const ProductSlice = createSlice({
     builder.addCase(getProductSelling.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.sellingProducts = action.payload;
+      state.sellingProducts = action.payload.products;
+      state.productCount = action.payload.productCount;
       state.isError = false;
     });
     builder.addCase(getProductSelling.rejected, (state, action: any) => {
@@ -331,7 +332,8 @@ const ProductSlice = createSlice({
     builder.addCase(getProductTrending.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.tredingProducts = action.payload;
+      state.tredingProducts = action.payload.products;
+      state.productCount = action.payload.productCount;
       state.isError = false;
     });
     builder.addCase(getProductTrending.rejected, (state, action: any) => {
@@ -346,7 +348,8 @@ const ProductSlice = createSlice({
     builder.addCase(getProductTopRated.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.topRated = action.payload;
+      state.topRated = action.payload.products;
+      state.productCount = action.payload.productCount;
       state.isError = false;
     });
     builder.addCase(getProductTopRated.rejected, (state, action: any) => {

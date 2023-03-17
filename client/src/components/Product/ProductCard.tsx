@@ -50,11 +50,10 @@ const ProductItem = ({
   id,
   key,
 }: ProductItemProps) => {
-  const [countItem, setCountItem] = useState(1);
   const { cart, isError, isSuccess } = useAppSelector((state) => state.cart);
   const dispatch = useAppDispatch();
   const handleAddCart = async () => {
-    dispatch(
+    await dispatch(
       addCart({
         product: {
           _id: id,
@@ -67,13 +66,13 @@ const ProductItem = ({
       })
     );
     toast("Add to cart successfully", {
-      className: "custom-toast", // đặt tên lớp CSS của riêng bạn
+      className: "custom-toast",
     });
   };
   const handleAddWishList = (id: string) => {
     dispatch(addWishlist(id));
     toast("Add to wishList successfully", {
-      className: "custom-toast", // đặt tên lớp CSS của riêng bạn
+      className: "custom-toast",
     });
   };
   const handleOpenQuickView = () => {

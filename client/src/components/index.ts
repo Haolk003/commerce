@@ -7,3 +7,4 @@ export { default as ProductCard3 } from "./Product/ProductCard3";
 export { default as NotLoggedInOnly } from "./hoc/NotLoggedInOnly";
 export { default as WishList } from "./WishList";
 export { default as QuickView } from "./QuickView";
+export { default as LoggedInOnly } from "./hoc/LoggedInOnly";

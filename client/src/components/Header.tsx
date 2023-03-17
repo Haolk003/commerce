@@ -16,7 +16,7 @@ import { HiOutlineChevronDown } from "react-icons/hi";
 import IconMilk from "../assets/iconMilk.svg";
 import { motion } from "framer-motion";
 import { RiCustomerService2Fill } from "react-icons/ri";
-import { addCart, deleteCart } from "../features/cart/cartSlice";
+import { deleteCart } from "../features/cart/cartSlice";
 import { AddCart } from "../features/cart/cartSlice";
 import { GetCart } from "../features/cart/cartSlice";
 import { logout, openWishList } from "../features/auth/authSlice";
@@ -41,12 +41,6 @@ const Header = () => {
     speed: 3000,
     autoplaySpeed: 3000,
     delay: 1.5,
-    // beforeChange: function (currentSlide: any, nextSlide: any) {
-    //   console.log("before change", currentSlide, nextSlide);
-    // },
-    // afterChange: function (currentSlide: any) {
-    //   console.log("after change", currentSlide);
-    // },
   };
   const variants = {
     open: { rotate: 180 },
@@ -55,9 +49,6 @@ const Header = () => {
   const variantModal = {
     open: { opacity: 1, y: 0 },
     close: { opacity: 0, y: -50 },
-  };
-  const handleOpenCart = () => {
-    setOpenCart(true);
   };
   const handleCloseCart = () => {
     setOpenCart(false);
@@ -379,9 +370,20 @@ const Header = () => {
             {" "}
             <li>Shop</li>
           </NavLink>
+          <NavLink
+            to="/cart"
+            className={({ isActive, isPending }) =>
+              isPending
+                ? "text-red-500"
+                : isActive
+                ? "text-link-hover"
+                : "hover:text-link-hover cursor-pointer"
+            }
+          >
+            {" "}
+            <li>Cart</li>
+          </NavLink>
           {/* <NavLink to="/products">Shop</NavLink> */}
-          <li>Blog</li>
-          <li>Contact</li>
         </ul>
         <div className="flex items-center gap-3">
           <RiCustomerService2Fill className="text-4xl text-heading-color " />

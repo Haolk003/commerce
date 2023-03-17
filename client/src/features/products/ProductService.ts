@@ -9,11 +9,8 @@ interface getAllProduct {
   price?: string;
 }
 const getProducts = async <T>(data: T) => {
-  const response = await axios.get(
-    `${base_url}/products//getAllPublic?` + data
-  );
-
-  return response.data.products;
+  const response = await axios.get(`${base_url}/products/getAllPublic?` + data);
+  return response.data;
 };
 const getProduct = async (id: string) => {
   const response = await axios.get(`${base_url}/products/getProduct/${id}`);

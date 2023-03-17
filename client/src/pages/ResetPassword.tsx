@@ -49,8 +49,8 @@ const ResetPass = () => {
     }
   }, [isSuccess]);
   useEffect(() => {
-    alert(message);
-  }, [isError]);
+    dispatch(resetForm());
+  }, []);
   return (
     <div className="flex  gap-12 w-[60%] mx-auto h-screen items-center">
       <img
@@ -118,4 +118,4 @@ const ResetPass = () => {
   );
 };
 
-export default NotLoggedInOnly(ResetPass);
+export default ResetPass;

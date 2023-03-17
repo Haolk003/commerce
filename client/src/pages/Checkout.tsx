@@ -4,12 +4,7 @@ import Stripe from "stripe";
 import { useFormik } from "formik";
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { object, string } from "yup";
-import { Audio, BallTriangle } from "react-loader-spinner";
-import {
-  parsePhoneNumberFromString,
-  parsePhoneNumber,
-  isValidNumber,
-} from "libphonenumber-js";
+import { isValidNumber } from "libphonenumber-js";
 import { BsArrowReturnLeft } from "react-icons/bs";
 import { Checkbox } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/hook";
@@ -19,7 +14,8 @@ import { RemoveAllCart } from "../features/cart/cartSlice";
 import { updateUser } from "../features/auth/authSlice";
 import { PaymentMethodResult } from "@stripe/stripe-js";
 import { checkCoupon } from "../features/coupon/couponSlice";
-
+import { showToastSuccess } from "../utils/toast";
+import { RotatingLines } from "react-loader-spinner";
 interface CheckoutProps {
   address: string;
   phoneNumber: string;
@@ -138,11 +134,9 @@ const Checkout = () => {
     if (isSuccess) {
       dispatch(RemoveAllCart());
       formik.resetForm();
+      showToastSuccess("Payment success");
     }
   }, [isSuccess]);
-  useEffect(() => {
-    console.log(coupon);
-  }, [coupon]);
   return (
     <div className="flex h-screen">
       <div className="w-[50%] flex justify-end px-10 bg-white py-10 ">
@@ -329,14 +323,12 @@ const Checkout = () => {
       </div>
       {isLoading && (
         <div className="absolute z-40 top-0 left-0 bg-[rgba(0,0,0,0.5)] w-full h-screen flex items-center justify-center  ">
-          <BallTriangle
-            height="80"
-            width="80"
-            // radius="9"
-            color="green"
-            ariaLabel="loading"
-            // wrapperStyle
-            // wrapperClass
+          <RotatingLines
+            strokeColor="grey"
+            strokeWidth="5"
+            animationDuration="0.75"
+            width="96"
+            visible={true}
           />
         </div>
       )}

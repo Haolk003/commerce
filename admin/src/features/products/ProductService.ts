@@ -19,7 +19,6 @@ const getProduct = async (id: string) => {
 };
 const createProduct = async <T>(productData: T) => {
   const response = await api.post(`/products/create`, productData);
-
   return response.data;
 };
 

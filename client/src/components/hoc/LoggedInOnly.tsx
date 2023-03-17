@@ -1,19 +1,17 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import React from "react";
-
+import { useEffect } from "react";
 import { useAppSelector } from "../../store/hook";
-const loggedInOnly = () => {
-  const navigate = useNavigate();
-  const NewComponent = () => {
-    const user = useAppSelector((state) => state.auth.user);
-    if (user) {
-      return <Outlet />;
-    } else {
-      navigate("/login");
-    }
-  };
-
-  return NewComponent();
+type Props = {
+  children: React.ReactNode;
 };
+const LoggedInOnly: React.FC<Props> = ({ children }) => {
+  // const navigate = useNavigate();
+  const user = useAppSelector((state) => state.auth.user);
+  if (!user) {
+    return <Navigate to="/login" replace={true} />;
+  }
 
-export default loggedInOnly;
+  return <>{children}</>;
+};
+export default LoggedInOnly;

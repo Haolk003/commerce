@@ -129,12 +129,13 @@ const CartSlice = createSlice({
           findCart.count =
             Number(findCart.count) + Number(action.payload.cart.count);
         } else {
-          state.cart = [action.payload.cart];
+          if (state.cart && state.cart.length > 0) {
+            state.cart.push(action.payload.cart);
+          } else {
+            state.cart = [action.payload.cart];
+          }
         }
       }
-      // } else {
-      //   state.cart.push(action.payload.cart);
-      // }
       state.isSuccess = false;
     });
     builder.addCase(deleteCart, (state, action) => {
