@@ -9,13 +9,14 @@ import { BsArrowReturnLeft } from "react-icons/bs";
 import { Checkbox } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { GetCart } from "../features/cart/cartSlice";
-import { addOrder } from "../features/order/orderSlice";
+import { AddOrder } from "../features/order/orderSlice";
 import { RemoveAllCart } from "../features/cart/cartSlice";
 import { updateUser } from "../features/auth/authSlice";
 import { PaymentMethodResult } from "@stripe/stripe-js";
 import { checkCoupon } from "../features/coupon/couponSlice";
 import { showToastSuccess } from "../utils/toast";
 import { RotatingLines } from "react-loader-spinner";
+
 interface CheckoutProps {
   address: string;
   phoneNumber: string;
@@ -64,7 +65,7 @@ const Checkout = () => {
   const user = useAppSelector((state) => state.auth.user);
   const [couponCode, setCouponCode] = useState("");
   const [checkSave, setCheckSave] = useState(false);
-  const { isError, isLoading, isSuccess } = useAppSelector(
+  const { isError, isLoading, isSuccess, message } = useAppSelector(
     (state) => state.order
   );
   const {
@@ -97,7 +98,7 @@ const Checkout = () => {
       if (result.paymentMethod && cart.length > 0) {
         if (coupon) {
           await dispatch(
-            addOrder({
+            AddOrder({
               ...values,
               COD: true,
               tripeId: `${result.paymentMethod.id}`,
@@ -106,7 +107,7 @@ const Checkout = () => {
           );
         } else {
           await dispatch(
-            addOrder({
+            AddOrder({
               ...values,
               COD: true,
               tripeId: `${result.paymentMethod.id}`,
@@ -131,12 +132,12 @@ const Checkout = () => {
     dispatch(GetCart());
   }, []);
   useEffect(() => {
-    if (isSuccess) {
+    if (message === "payment successfully") {
       dispatch(RemoveAllCart());
       formik.resetForm();
       showToastSuccess("Payment success");
     }
-  }, [isSuccess]);
+  }, [message]);
   return (
     <div className="flex h-screen">
       <div className="w-[50%] flex justify-end px-10 bg-white py-10 ">

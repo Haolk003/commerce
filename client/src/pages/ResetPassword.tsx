@@ -42,12 +42,12 @@ const ResetPass = () => {
     },
   });
   useEffect(() => {
-    if (isSuccess) {
+    if (message === "reset password successfully") {
       formik.resetForm();
       dispatch(resetForm());
       navigate("/login");
     }
-  }, [isSuccess]);
+  }, [message]);
   useEffect(() => {
     dispatch(resetForm());
   }, []);

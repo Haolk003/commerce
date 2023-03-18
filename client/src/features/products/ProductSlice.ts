@@ -285,7 +285,7 @@ const ProductSlice = createSlice({
     builder.addCase(Rating.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.product = action.payload.products;
+      state.product = action.payload;
       state.isError = false;
     });
     builder.addCase(Rating.rejected, (state, action: any) => {

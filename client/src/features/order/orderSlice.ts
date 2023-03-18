@@ -20,13 +20,13 @@ interface orderProps {
   address: string;
   phoneNumber: string;
 }
-export const addOrder = createAsyncThunk(
+export const AddOrder = createAsyncThunk(
   "orders/create",
-  async (data: orderProps) => {
+  async (data: orderProps, { rejectWithValue }) => {
     try {
       return await OrderService.addOrder(data);
     } catch (err) {
-      console.log(err);
+      rejectWithValue(err);
     }
   }
 );
@@ -35,17 +35,19 @@ const OrderSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers(builder) {
-    builder.addCase(addOrder.pending, (state) => {
+    builder.addCase(AddOrder.pending, (state) => {
       state.isLoading = true;
     });
-    builder.addCase(addOrder.fulfilled, (state) => {
+    builder.addCase(AddOrder.fulfilled, (state) => {
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = true;
+      state.message = "payment successfully";
     });
-    builder.addCase(addOrder.rejected, (state, action) => {
+    builder.addCase(AddOrder.rejected, (state, action) => {
       state.isLoading = false;
       state.isSuccess = false;
+      state.isError = true;
     });
   },
 });

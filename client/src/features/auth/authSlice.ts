@@ -257,6 +257,7 @@ const userSlice = createSlice({
       state.isLoading = false;
       state.isSuccess = true;
       state.isError = false;
+      state.message = "reset password successfully";
     });
     builder.addCase(resetPassword.rejected, (state, action: any) => {
       state.isLoading = false;
@@ -362,12 +363,18 @@ const userSlice = createSlice({
     });
 
     builder.addCase(resetForm, () => initialState);
+    builder.addCase(logout.pending, (state) => {
+      state.isLoading = true;
+    });
     builder.addCase(logout.fulfilled, (state) => {
       state.user = null;
       state.isError = false;
       state.isSuccess = false;
       localStorage.removeItem("user");
       localStorage.removeItem("token");
+    });
+    builder.addCase(logout.rejected, (state) => {
+      state.message = "";
     });
     builder.addCase(openWishList, (state) => {
       state.openWishList = true;
