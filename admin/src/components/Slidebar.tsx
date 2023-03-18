@@ -20,7 +20,7 @@ const Slidebar = () => {
     dispatch(Logout());
   };
   return (
-    <div className="flex flex-col w-[250px] gap-4 bg-white shadow-sm shadow-gray-400 h-screen ">
+    <div className="flex flex-col w-[250px] gap-4 bg-white shadow-sm shadow-gray-400 h-screen relative overflow-hidden ">
       <img src={LogoLight} alt="" className="w-[120px] ml-6 my-5" />
       {/*  */}
       <NavLink
@@ -99,7 +99,7 @@ const Slidebar = () => {
       </NavLink>
       {/*  */}
       <button
-        className="flex items-center gap-4 ml-6 text-[16px] text-gray-600 w-full hover:text-color-primary py-3"
+        className="flex items-center gap-4  text-center text-[16px] text-white w-[80%] bg-color-primary h-[40px] rounded-md  absolute bottom-3 left-[50%] -translate-x-[50%] justify-center"
         onClick={logout}
       >
         <MdLogout className="text-xl" />
