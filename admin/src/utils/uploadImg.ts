@@ -14,10 +14,11 @@ export const uploadImage = async (files: any[]) => {
     }
   }
   let returnData = [...images];
-
-  const response = await axios.post(`${base_url}/upload`, formData, config);
-  console.log(response);
-  returnData = [...images, ...response.data];
+  if (formData.has("images")) {
+    const response = await axios.post(`${base_url}/upload`, formData, config);
+    console.log(response.data);
+    returnData = [...images, ...response.data];
+  }
 
   return returnData;
 };
