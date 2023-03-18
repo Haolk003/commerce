@@ -370,11 +370,13 @@ const userSlice = createSlice({
       state.user = null;
       state.isError = false;
       state.isSuccess = false;
+      state.isLoading = false;
       localStorage.removeItem("user");
       localStorage.removeItem("token");
     });
     builder.addCase(logout.rejected, (state) => {
       state.message = "";
+      state.isLoading = false;
     });
     builder.addCase(openWishList, (state) => {
       state.openWishList = true;
