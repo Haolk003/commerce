@@ -7,6 +7,7 @@ import { forgotPassword } from "../features/auth/authSlice";
 import { showToastError } from "../utils/toast";
 import { ColorRing } from "react-loader-spinner";
 import { resetForm } from "../features/auth/authSlice";
+import { showToastSuccess } from "../utils/toast";
 interface MyFormValues {
   email: string;
 }
@@ -19,6 +20,9 @@ const ForgotPass = () => {
     initialValues: { email: "" },
     onSubmit(values) {
       dispatch(forgotPassword(values.email));
+      showToastSuccess(
+        "We've sent you an email with a link to update your password."
+      );
     },
   });
   useEffect(() => {
