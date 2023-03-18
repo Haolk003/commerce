@@ -51,7 +51,7 @@ const Dashboard = () => {
   });
 
   const Orderdata: DataType[] = [];
-  if (orders) {
+  if (orders && orders.length > 0) {
     for (let i = 0; i < orders.length; i++) {
       Orderdata.push({
         orderTime: dayjs(orders[i].createdAt).format("MMM DD, YYYY"),
@@ -208,7 +208,6 @@ const Dashboard = () => {
     dispatch(totalAggOrder());
     dispatch(totalWeekly());
     dispatch(classifyOrder());
-
     dispatch(getProducts("sort=-sold&limit=10"));
   }, []);
   useEffect(() => {

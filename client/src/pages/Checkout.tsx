@@ -285,7 +285,8 @@ const Checkout = () => {
               $
               {cart && cart.length > 0 && coupon
                 ? (
-                    cart.reduce((total, item) => {
+                    cart &&
+                    cart?.reduce((total, item) => {
                       return (
                         total +
                         (item.product.price -
@@ -294,19 +295,21 @@ const Checkout = () => {
                           item.count
                       );
                     }, 5) -
-                    (cart.reduce((total, item) => {
-                      return (
-                        total +
-                        (item.product.price -
-                          (item.product.price * item.product.sale.discount) /
-                            100) *
-                          item.count
-                      );
-                    }, 5) *
-                      coupon.discount) /
-                      100
+                      (cart &&
+                        cart?.reduce((total, item) => {
+                          return (
+                            total +
+                            (item.product.price -
+                              (item.product.price *
+                                item.product.sale.discount) /
+                                100) *
+                              item.count
+                          );
+                        }, 5) * coupon.discount) /
+                        100
                   ).toFixed(2)
-                : cart
+                : cart &&
+                  cart
                     .reduce((total, item) => {
                       return (
                         total +
