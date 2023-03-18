@@ -7,6 +7,7 @@ import { useDropzone } from "react-dropzone";
 import { Accept } from "react-dropzone";
 import { uploadImage } from "../utils/uploadImg";
 import { updateUser } from "../features/auth/authSlice";
+import { ColorRing } from "react-loader-spinner";
 type Props = {
   onFileUpload: (file: File) => void;
 };
@@ -24,7 +25,7 @@ const validateSchema = object().shape({
 });
 const Profile = () => {
   const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.auth.user);
+  const { isLoading, user } = useAppSelector((state) => state.auth);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -68,9 +69,7 @@ const Profile = () => {
   //       formik.values.phoneNumber = user.mobile;
   //     }
   //   }, [user]);
-  useEffect(() => {
-    console.log(selectedFile);
-  }, [selectedFile]);
+
   return (
     <>
       <form
@@ -159,6 +158,19 @@ const Profile = () => {
           Update
         </button>
       </form>
+      {isLoading && (
+        <div className="absolute top-0 left-0 w-screen h-screen flex items-center justify-center bg-[rgb(0,0,0,0.3)] ">
+          <ColorRing
+            visible={true}
+            height="80"
+            width="80"
+            ariaLabel="blocks-loading"
+            wrapperStyle={{}}
+            wrapperClass="blocks-wrapper"
+            colors={["#e15b64", "#f47e60", "#f8b26a", "#abbd81", "#849b87"]}
+          />
+        </div>
+      )}
     </>
   );
 };
