@@ -170,7 +170,6 @@ const orderslice = createSlice({
         state.orders = action.payload.orders;
         state.orderCount = action.payload.orderCount;
       }
-
       state.isError = false;
     });
     builder.addCase(getOrders.rejected, (state, action: any) => {
@@ -225,7 +224,10 @@ const orderslice = createSlice({
     builder.addCase(totalAggOrder.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.aggOrder = action.payload;
+      if (action.payload) {
+        state.aggOrder = action.payload;
+      }
+
       state.isError = false;
     });
     builder.addCase(totalAggOrder.rejected, (state, action: any) => {
@@ -241,7 +243,10 @@ const orderslice = createSlice({
     builder.addCase(totalWeekly.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.totalWeekly = action.payload;
+      if (action.payload) {
+        state.totalWeekly = action.payload;
+      }
+
       state.isError = false;
     });
     builder.addCase(totalWeekly.rejected, (state, action: any) => {
@@ -257,7 +262,10 @@ const orderslice = createSlice({
     builder.addCase(classifyOrder.fulfilled, (state, action: any) => {
       state.isLoading = false;
       state.isSuccess = true;
-      state.classify = action.payload;
+      if (state.classify) {
+        state.classify = action.payload;
+      }
+
       state.isError = false;
     });
     builder.addCase(classifyOrder.rejected, (state, action: any) => {
