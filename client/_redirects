@@ -1,10 +1,10 @@
 # Redirects from what the browser requests to what we serve
-/login
-/register
-/cart
-/products
-/product/:id
-/forgot-password
-/reset-password
-/checkout
-/deal
+/login                /login
+/register       /register
+/products             /products
+/product/:id              /product
+/forgot-password  /authors/about-c%C3%A9line
+/reset-password   /reset-password
+/checkout   /checkout
+/deal     /deal
+/home    /
