@@ -1,0 +1,9 @@
+/login
+/register
+/cart
+/products
+/product/:id
+/forgot-password
+/reset-password
+/checkout
+/deal
