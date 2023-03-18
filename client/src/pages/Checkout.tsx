@@ -64,7 +64,7 @@ const Checkout = () => {
   const user = useAppSelector((state) => state.auth.user);
   const [couponCode, setCouponCode] = useState("");
   const [checkSave, setCheckSave] = useState(false);
-  const { isError, isLoading, isSuccess } = useAppSelector(
+  const { isError, isLoading, isSuccess, message } = useAppSelector(
     (state) => state.order
   );
   const {
@@ -131,12 +131,12 @@ const Checkout = () => {
     dispatch(GetCart());
   }, []);
   useEffect(() => {
-    if (isSuccess) {
+    if (message === "payment successfully") {
       dispatch(RemoveAllCart());
       formik.resetForm();
       showToastSuccess("Payment success");
     }
-  }, [isSuccess]);
+  }, [message]);
   return (
     <div className="flex h-screen">
       <div className="w-[50%] flex justify-end px-10 bg-white py-10 ">

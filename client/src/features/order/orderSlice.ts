@@ -22,11 +22,11 @@ interface orderProps {
 }
 export const addOrder = createAsyncThunk(
   "orders/create",
-  async (data: orderProps) => {
+  async (data: orderProps, { rejectWithValue }) => {
     try {
       return await OrderService.addOrder(data);
     } catch (err) {
-      console.log(err);
+      rejectWithValue(err);
     }
   }
 );
@@ -42,10 +42,12 @@ const OrderSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = true;
+      state.message = "payment successfully";
     });
     builder.addCase(addOrder.rejected, (state, action) => {
       state.isLoading = false;
       state.isSuccess = false;
+      state.isError = true;
     });
   },
 });
